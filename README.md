@@ -19,9 +19,10 @@ The takehome already contains a somewhat functioning chatbot. The first step is 
 
 Then you can chat with the chatbot. Let me know if you have issues doing this.
 
-However, it's pretty basic. We want it to sound more like our client. We have already collected a few example conversations in training_data/conversations.json.
-
 # Goals
+
+This chatbot as it stands is pretty basic. For one, we want it to sound more like our client. We have already collected a few fake example conversations in training_data/conversations.json. We also want to improve it more generally.
+
 1. **Improve Client Personality Emulation**  
    Use DSPy’s KNNFewShot optimizer (https://dspy.ai/learn/optimization/optimizers/) to make the chatbot’s responses reflect our client’s voice more authentically, based on examples in `conversations.json`.
 
@@ -35,7 +36,9 @@ However, it's pretty basic. We want it to sound more like our client. We have al
    Identify and implement an additional enhancement that you believe would improve the product experience.
 
 The first goal is probably the hardest, but I want it done first and it will be what I look at closest. The things I'm looking for are 1. Can you quickly learn a new framework/new technology 2. How do you think about product improvements 2. 
-How do you think about implementing these product improvements using dspy
+How do you think about implementing these product improvements using dspy.
+
+I'm not holding your hand much on this take-home on purpose as I'd like to feel confident you can take on these challenges independently.
 
 **Note**: Avoid spending time on extensive prompt engineering. At Whisper, we value modular and maintainable code, and we prefer optimizations within DSPy itself rather than large, static prompts. Also, to see the actual prompts dspy is generating, uncomment the lm.inspect_history(n=1) line in `chat_interface.py`.
 
