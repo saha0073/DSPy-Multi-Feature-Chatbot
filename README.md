@@ -1,5 +1,3 @@
-# takehome
-
 So instead of doing a basic off-the-shelf take home which is probably now easily solved using chatgpt or something, I thought it'd be better to have it be more custom-fit to the problem Whisper is solving.
 
 ## Project Overview
