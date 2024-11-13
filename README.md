@@ -1,7 +1,6 @@
 So instead of doing a basic off-the-shelf take home which is probably now easily solved using chatgpt or something, I thought it'd be better to have it be more custom-fit to the problem Whisper is solving.
 
-## Project Overview
-This take-home simulates a simplified version of our product at Whisper, using DSPy to build a chatbot that closely aligns with our client’s persona and product requirements.
+# Project Overview
 
 This takehome is basically a super dumbed down version of the product Whisper makes. It uses DSPy, which is a tool useful for making LLM-based applications. It has some pretty interesting abstractions which I like and have found convenient for tinkering and building in the space we're working in.
 
@@ -22,7 +21,7 @@ Then you can chat with the chatbot. Let me know if you have issues doing this.
 
 However, it's pretty basic. We want it to sound more like our client. We have already collected a few example conversations in training_data/conversations.json.
 
-### Goals
+# Goals
 1. **Improve Client Personality Emulation**  
    Use DSPy’s KNNFewShot optimizer (https://dspy.ai/learn/optimization/optimizers/) to make the chatbot’s responses reflect our client’s voice more authentically, based on examples in `conversations.json`.
 
@@ -38,7 +37,7 @@ However, it's pretty basic. We want it to sound more like our client. We have al
 The first goal is probably the hardest, but I want it done first and it will be what I look at closest. The things I'm looking for are 1. Can you quickly learn a new framework/new technology 2. How do you think about product improvements 2. 
 How do you think about implementing these product improvements using dspy
 
-**Note**: Avoid spending time on extensive prompt engineering. At Whisper, we value modular and maintainable code, and we prefer optimizations within DSPy itself rather than large, static prompts.
+**Note**: Avoid spending time on extensive prompt engineering. At Whisper, we value modular and maintainable code, and we prefer optimizations within DSPy itself rather than large, static prompts. Also, to see the actual prompts dspy is generating, uncomment the lm.inspect_history(n=1) line in `chat_interface.py`.
 
 Please leave comments or notes on your thought process and what you built in a separate README file for me to take a look at.
 

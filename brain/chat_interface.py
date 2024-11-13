@@ -45,4 +45,5 @@ while True:
     print()
     print("Response:", response)
     print()
+    # uncomment this line to see the 
     # lm.inspect_history(n=1)
