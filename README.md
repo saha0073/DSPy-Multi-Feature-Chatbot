@@ -44,4 +44,6 @@ How do you think about implementing these product improvements using dspy
 
 Please leave comments or notes on your thought process and what you built in a separate README file for me to take a look at.
 
+I am expecting you to work on this for 2-3 hours. You can work on it longer if you'd like, just let me know how long you end up working on it.
+
 Good luck!
