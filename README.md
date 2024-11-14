@@ -13,7 +13,7 @@ The takehome already contains a somewhat functioning chatbot. The first step is 
     "program": "${workspaceFolder}/brain/chat_interface.py",
     "console": "integratedTerminal",
     "env": {
-        "TOGETHER_API_KEY": ${api key here, which I will give to you},
+        "TOGETHER_API_KEY": ${api key here. You can make a free account at together.ai to get an api key},
     }
 },
 
