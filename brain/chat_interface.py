@@ -1,9 +1,18 @@
+import os
+
 from models import ChatMessage, ChatHistory, MessageContext
 import dspy
 from lms.together import Together
 from modules.chatter import ChatterModule
 from datetime import datetime
 import time
+
+# Get the brain directory path and set up model path
+brain_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(brain_dir, "saved_models", "optimized_chatbot_with_context.json")
+
+# Debug print
+print(f"Looking for model at: {model_path}")
 
 # Configure LM
 lm = Together(
@@ -18,10 +27,16 @@ lm = Together(
 
 dspy.settings.configure(lm=lm)
 
-# Initialize chat components
+# Initialize chat components with proper error handling
 chat_history = ChatHistory(messages=[])
 chatter = ChatterModule(examples=None)
-chatter.load(path="saved_models/optimized_chatbot_with_context.json")
+try:
+    chatter.load(path=model_path)
+    print("Model loaded successfully")
+except FileNotFoundError as e:
+    print(f"Error: Model file not found at {model_path}")
+    print("Current working directory:", os.getcwd())
+    raise e
 
 # Initialize timing
 start_time = time.time()
