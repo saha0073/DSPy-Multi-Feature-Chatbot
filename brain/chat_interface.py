@@ -19,6 +19,7 @@ dspy.settings.configure(lm=lm)
 
 chat_history = ChatHistory()
 chatter = ChatterModule(examples=None)
+chatter.load(path="saved_models/optimized_knn_no_context.json")
 while True:
     # Get user input
     user_input = input("You: ")
