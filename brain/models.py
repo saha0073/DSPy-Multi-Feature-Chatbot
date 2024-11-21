@@ -3,9 +3,17 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
+class MessageContext(BaseModel):
+    message_number: int
+    time_of_day: str
+    minutes_since_start: int
+    minutes_since_last: int
+
+
 class ChatMessage(BaseModel):
     from_creator: bool
     content: str
+    context: Optional[MessageContext] = None
 
     def __str__(self):
         role = "YOU" if self.from_creator else "THE FAN"
@@ -19,11 +27,6 @@ class ChatHistory(BaseModel):
         messages = []
         for i, message in enumerate(self.messages):
             message_str = str(message)
-            # if i == len(self.messages) - 1 and not message.from_creator:
-            #     message_str = (
-            #         "(The fan just sent the following message which your message must respond to): "
-            #         + message_str
-            #     )
             messages.append(message_str)
         return "\n".join(messages)
     
