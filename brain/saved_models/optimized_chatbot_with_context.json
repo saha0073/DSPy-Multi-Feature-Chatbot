@@ -1,0 +1,29 @@
+{
+  "responder": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Given the fields `chat_history`, `context`, produce the fields `reasoning`, `output`.",
+      "fields": [
+        {
+          "prefix": "Chat History:",
+          "description": "${chat_history}"
+        },
+        {
+          "prefix": "Context:",
+          "description": "${context}"
+        },
+        {
+          "prefix": "Reasoning:",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Output:",
+          "description": "${output}"
+        }
+      ]
+    }
+  }
+}
