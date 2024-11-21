@@ -43,6 +43,53 @@ start_time = time.time()
 last_message_time = start_time
 message_counter = 0
 
+# Add these constants at the top with other imports
+FORBIDDEN_TERMS = {
+    'social_media': [
+        'instagram', 'twitter', 'facebook', 'tiktok', 'snapchat', 
+        'linkedin', 'youtube', 'reddit', 'discord', 'telegram'
+    ],
+    'meetup_terms': [
+        'meet up', 'meet in person', 'get together', 'coffee', 
+        'dinner', 'lunch', 'hangout', 'in person', 'meet somewhere',
+        'location', 'address', 'place to meet'
+    ]
+}
+
+def validate_response(text):
+    """Check if response contains forbidden topics"""
+    text_lower = text.lower()
+    
+    # Check for forbidden social media (except OnlyFans)
+    for platform in FORBIDDEN_TERMS['social_media']:
+        if platform.lower() in text_lower:
+            return False, f"Contains forbidden platform: {platform}"
+            
+    # Check for meetup suggestions
+    for term in FORBIDDEN_TERMS['meetup_terms']:
+        if term.lower() in text_lower:
+            return False, f"Contains meetup suggestion: {term}"
+            
+    return True, ""
+
+def get_safe_response(chatter, chat_str, context_str):
+    """Get a response that doesn't contain forbidden topics"""
+    max_attempts = 3
+    
+    for attempt in range(max_attempts):
+        response = chatter(
+            chat_history=chat_str,
+            context=context_str
+        )
+        
+        is_safe, reason = validate_response(response)
+        if is_safe:
+            return response
+        print(f"Filtered attempt {attempt + 1}: {reason}")
+    
+    # Fallback response if all attempts contain forbidden topics
+    return "I prefer to keep our interaction here on OnlyFans. How can I help you today?"
+
 def get_context(message_number):
     current_time = time.time()
     
@@ -109,11 +156,8 @@ while True:
         chat_str = format_chat_history(chat_history)
         context_str = format_context(context)
         
-        # Get response using loaded model with context
-        response = chatter(
-            chat_history=chat_str,
-            context=context_str
-        )
+        # Get safe response using loaded model with context
+        response = get_safe_response(chatter, chat_str, context_str)
 
         # Update timing
         last_message_time = time.time()
