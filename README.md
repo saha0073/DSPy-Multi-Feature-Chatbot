@@ -1,6 +1,19 @@
-# AI Chat Bot Implementation
+# DSPy Multi-Feature Chatbot
 
-This project implements an AI-powered chatbot with several key features to enhance user interaction and maintain appropriate conversation boundaries.
+This project implements an AI-powered chatbot using DSPy (Declarative Self-improving Python), an open-source framework that enables programming—rather than prompting—language models. Unlike traditional prompt engineering, DSPy allows us to write compositional Python code and use its tools to teach language models to deliver high-quality outputs.
+
+The implementation includes four key features:
+
+1. **Client Personality Emulation** (`main`): Leverages DSPy's KNNFewShot optimizer to create consistent personality and voice, moving beyond simple prompt templates.
+
+2. **Context Awareness** (`feature/context-awareness`): Implements time-based response generation for maintaining natural conversation flow.
+
+3. **Topic Filtering** (`feature/context-and-topic-filtering`): Manages content boundaries for appropriate interactions.
+
+4. **Emoji Enhancement** (`feature/context-topic-filtering-and-emojis`): Adds visual engagement to make conversations more natural and engaging.
+
+Each feature is implemented in its own branch, with progressive improvements building upon the previous functionality. The following sections detail the implementation and results of each feature.
+
 
 ## 1. Client Personality Emulation
 **Branch: `main`**
@@ -12,16 +25,17 @@ Implemented personality emulation using DSPy's KNNFewShot optimizer to make the 
 
 ### 1.2 Implementation Details
 #### Key Components
-- KNN-based response generation
-- Example-based personality learning
-- Response optimization
-- Natural conversation flow
+In `knn_optimization.ipynb`:
+- KNN-based response generation using DSPy's KNNFewShot
+- Training with provided conversation examples
+- Response optimization with k=4 neighbors
+- Model evaluation using ROUGE-L and semantic similarity
 
 ### 1.3 Technical Implementation
 #### Dataset Creation
-- Utilized base dataset `training_data/conversations.json`
-- Contains example conversations showcasing desired personality traits
-- Structured for KNN-based learning
+- Used provided dataset `training_data/conversations.json`
+- Dataset contains creator-fan conversations
+- Structured for KNN training with input-response pairs
 
 #### KNN Optimization
 - Implemented in `knn_optimization.ipynb`
@@ -74,16 +88,17 @@ Implemented context awareness to make the chatbot more responsive to timing and 
 
 ### 2.2 Implementation Details
 #### Context Parameters
-- Time of day (morning/afternoon/evening)
-- Message number in conversation
-- Minutes since conversation start
-- Minutes since last message
+In `chat_interface.py`, we track:
+- Current time of day (morning/afternoon/evening) using `datetime.now()`
+- Message sequence number in current conversation
+- Time elapsed since conversation started (in minutes)
+- Time gap between messages (in minutes)
 
 #### Key Components
-- Context-aware KNN optimization
-- Time-based response generation
-- Conversation flow tracking
-- Dynamic context updates
+- Context string formatting for each message
+- Time-based response validation
+- Message history tracking
+- Real-time context updates based on current time
 
 ### 2.3 Technical Implementation
 #### Dataset Creation
@@ -121,6 +136,8 @@ Implemented context awareness to make the chatbot more responsive to timing and 
 - Maintains conversation coherence across time
 
 ### 2.4 Example Interactions
+The following interactions demonstrate how the chatbot maintains awareness of the current time of day and politely corrects users when they mention incorrect times:      
+
 You: Hi there! Having a good afternoon?    
 Response: Yes, I'm doing great! Thanks for asking! How can I assist you today?    
 
@@ -144,16 +161,18 @@ Implemented a content filtering system to ensure appropriate conversation bounda
 
 ### 3.2 Implementation Details
 #### Filtered Topics
-- Social media platforms (except OnlyFans)
-- In-person meeting suggestions
-- Location sharing
+In `chat_interface.py`, we maintain `FORBIDDEN_TERMS`:
+- Social media platforms: 'instagram', 'twitter', 'facebook', etc. (except OnlyFans)
+- Meetup terms: 'meet up', 'coffee', 'dinner', 'lunch', etc.
+- Location-related: 'address', 'place to meet', 'location'
 - Personal contact information
 
 #### Key Components
-- Pattern-based filtering with comprehensive term lists
-- Multiple generation attempts (max 3) for filtered responses
-- Graceful fallback responses
-- Real-time response validation
+In `validate_response()` and `get_safe_response()`:
+- Pattern matching against comprehensive forbidden term lists
+- Multiple generation attempts (max 3) if response contains forbidden terms
+- Fallback response: "I prefer to keep our interaction here on OnlyFans"
+- Real-time validation before sending each response
 
 ### 3.3 Example Interactions
 The following interactions demonstrate how the chatbot actively avoids discussions about social media platforms and politely deflects any requests for in-person meetings or location sharing, maintaining professional boundaries while keeping the conversation on the platform:
@@ -173,3 +192,44 @@ Response: It seems like they are not interested in meeting up, so it might be be
 
 
 The chat examples show how the bot successfully filters out social media mentions and meetup requests. When users mention Instagram or suggest meeting at Starbucks, the bot politely redirects the conversation while keeping the interaction friendly.
+
+## 4. Further Product Enhancements (Emojis)
+**Branch: `feature/context-topic-filtering-and-emojis`**
+
+Implemented emoji enhancement to make the chatbot's responses more engaging and visually appealing, adding appropriate emojis based on message content.
+
+### 4.1 Modified Files
+- `brain/chat_interface.py`: Added emoji mapping and integration with response generation
+
+### 4.2 Implementation Details
+#### Key Components
+In `chat_interface.py`, we implement:
+- `EMOJI_MAP` dictionary for keyword-to-emoji mapping
+- `add_emojis()` function for emoji placement
+- Support for multiple emojis in single response
+- Smart positioning: adds emojis near exclamation marks or at message end
+
+#### Emoji Mappings
+- Gratitude: thank → 😊
+- Appreciation: love → ❤️
+- Content: photo → 📷, video → 🎥
+- Engagement: chat → 💭
+- Special: exclusive → ✨, special → 🌟
+- Subscription: subscribe → ⭐
+
+### 4.3 Example Interactions
+The following interactions demonstrate how the chatbot naturally incorporates emojis based on message content:
+
+You: I love your content so much!      
+Response: "Thank you so much 😊! That means a lot coming from you."
+
+You: Is this exclusive content?       
+Response: Could you please specify which content you're referring to? I'd be more than happy to provide details about its exclusivity 📸!     
+
+You: I love your special photos!        
+Response: Since the fan loves the creator's special photos, the next step could be for them to ask when those upcoming projects might include more photography content. ❤️ 📸 📷 🌟    
+
+You: Can't wait for your next video!       
+Response: Thanks so much 😊 🎥! I'm actually working on editing my next video right now 😊 🎥! It should be out soon 😊 🎥!
+
+As shown in the chat, the bot adds relevant emojis to its responses - using 😊 for thanks, 📸 for photos, 🎥 for videos, and ⭐ for special content. The emojis make the conversation more fun while keeping it natural.
