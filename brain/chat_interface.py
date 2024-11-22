@@ -56,6 +56,37 @@ FORBIDDEN_TERMS = {
     ]
 }
 
+# Add this after your existing imports
+EMOJI_MAP = {
+    "thank": "😊",
+    "love": "❤️",
+    "excited": "🎉",
+    "content": "📸",
+    "photo": "📷",
+    "video": "🎥",
+    "subscribe": "⭐",
+    "exclusive": "✨",
+    "special": "🌟",
+    "chat": "💭",
+    "new": "✨"
+}
+
+def add_emojis(response):
+    """Add relevant emojis to the response"""
+    modified_response = response
+    for word, emoji in EMOJI_MAP.items():
+        if word in response.lower():
+            # Add emoji before exclamation marks or at the end
+            modified_response = modified_response.replace("!", f" {emoji}!")
+    
+    # If no exclamation marks and emoji was needed, add to end
+    if modified_response == response:
+        for word, emoji in EMOJI_MAP.items():
+            if word in response.lower():
+                modified_response = modified_response + f" {emoji}"
+    
+    return modified_response
+
 def validate_response(text):
     """Check if response contains forbidden topics"""
     text_lower = text.lower()
@@ -73,7 +104,7 @@ def validate_response(text):
     return True, ""
 
 def get_safe_response(chatter, chat_str, context_str):
-    """Get a response that doesn't contain forbidden topics"""
+    """Get a response that doesn't contain forbidden topics and includes emojis"""
     max_attempts = 3
     
     for attempt in range(max_attempts):
@@ -84,11 +115,10 @@ def get_safe_response(chatter, chat_str, context_str):
         
         is_safe, reason = validate_response(response)
         if is_safe:
-            return response
+            return add_emojis(response)  # Add emojis to safe responses
         print(f"Filtered attempt {attempt + 1}: {reason}")
     
-    # Fallback response if all attempts contain forbidden topics
-    return "I prefer to keep our interaction here on OnlyFans. How can I help you today?"
+    return "I prefer to keep our interaction here on OnlyFans. How can I help you today? 💭"
 
 def get_context(message_number):
     current_time = time.time()
